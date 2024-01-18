@@ -50,14 +50,19 @@ function App() {
     };
 
     const handleFetchFromClipboard = async () => {
+
         try {
             const text = await navigator.clipboard.readText();
-            const clipboardNumbers = text.split(/\s+|,/).filter(Boolean).map(Number);
+            const clipboardNumbers = text.split(/\n/)
+            .map(entry => entry.replace(',', '').trim()) 
+            .filter(entry => entry !== '')
+            .map(entry => Number(entry));
             setNumbers([...clipboardNumbers, '']);
         } catch (err) {
             setError('Failed to fetch numbers from clipboard.');
         }
     };
+
 
     const handleSubmit = async () => {
       setIsLoading(true);
@@ -66,6 +71,10 @@ function App() {
       setStatusMessage('Calculating...');
       setProgress(0);
       const startTime = Date.now();
+    //   let timeout = true
+      setTimeout( async() => {
+         console.log('checking ')
+      }, 1000)
   
       const processedNumbers = numbers
       .map(n => n.toString().trim())
